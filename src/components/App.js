@@ -9,20 +9,20 @@ import ImagePopup from "./ImagePopup";
 
 function App() {
 
+  { /* Создаем состояния */ }
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({ name: '', link: '' });
+
+
   { /* Закрываем все попапы */ }
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setselectedCard(false);
+    setSelectedCard({ name: '', link: '' });
   }
-
-  { /* Создаем состояния */ }
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setselectedCard] = React.useState(false);
-
 
   return (
 
@@ -35,7 +35,7 @@ function App() {
         onEditProfile={setIsEditProfilePopupOpen}
         onAddPlace={setIsAddPlacePopupOpen}
         onEditAvatar={setIsEditAvatarPopupOpen}
-        onCardClick={setselectedCard}
+        onCardClick={setSelectedCard}
       />
 
       { /* Блок footer */}
@@ -85,8 +85,7 @@ function App() {
         name='confirm-delete-element'
         buttonText='Да'
         onClose={closeAllPopups}
-      >
-      </PopupWithForm>
+      />
 
       { /* Попап изменения аватара */}
       <PopupWithForm

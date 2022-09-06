@@ -23,7 +23,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
         setCards(cardsInfo);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(`Ошибка загрузки данных с сервера: ${err}`);
       });
   }, []);
 
