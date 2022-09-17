@@ -1,25 +1,22 @@
 import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
 import Card from "./Card";
+import { CardsContext } from "../contexts/CardsContext";
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-
-  { /* Создаем состояния */ }
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
+  /* Создаем состояния */
   const [cards, setCards] = React.useState([]);
 
-  { /* Получаем данные профиля и карточки с сервера */ }
+  /* Подписываемся на контекст текущего пользователя */
+  const currentUser = React.useContext(CurrentUserContext);
+  //console.log("контекст приехал", currentUser);
+
+  /* Получаем данные профиля и карточки с сервера */
   React.useEffect(() => {
-    Promise.all([
-      api.getUserInfo(),
-      api.getInitialCards(),
-    ])
-      .then(([userData, cardsInfo]) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
+    api
+      .getInitialCards()
+      .then((cardsInfo) => {
         setCards(cardsInfo);
       })
       .catch((err) => {
@@ -29,43 +26,53 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
 
   return (
     <main className="content">
-
-      { /* Блок profile */}
+      {/* Блок profile */}
       <section className="profile">
         <div className="profile__common">
-          { /* Аватар */}
-          <div className="profile__avatar" onClick={onEditAvatar} style={{ backgroundImage: `url(${userAvatar})` }} >
+          {/* Аватар */}
+          <div
+            className="profile__avatar"
+            onClick={onEditAvatar}
+            style={{ backgroundImage: `url(${currentUser.avatar})` }}
+          >
             <div className="profile__avatar-overlay"></div>
           </div>
 
-          { /* Данные профиля и редактирование */}
+          {/* Данные профиля и редактирование */}
           <div className="profile__info">
             <div className="info">
-              <h1 className="info__name">{userName}</h1>
-              <p className="info__description">{userDescription}</p>
+              <h1 className="info__name">{currentUser.name}</h1>
+              <p className="info__description">{currentUser.about}</p>
             </div>
 
-            { /* Кнопка редактировать профиль */}
-            <button className="profile__edit" type="button" aria-label="Редактировать профиль" onClick={onEditProfile}></button>
+            {/* Кнопка редактировать профиль */}
+            <button
+              className="profile__edit"
+              type="button"
+              aria-label="Редактировать профиль"
+              onClick={onEditProfile}
+            ></button>
           </div>
         </div>
-        { /* Кнопка добавить место */}
-        <button className="profile__add-button" type="button" aria-label="Добавить запись" onClick={onAddPlace}></button>
+        {/* Кнопка добавить место */}
+        <button
+          className="profile__add-button"
+          type="button"
+          aria-label="Добавить запись"
+          onClick={onAddPlace}
+        ></button>
       </section>
 
-      { /* Блок elements */}
+      {/* Блок elements */}
       <section className="elements">
-        {cards.map(card => (
-          <Card
-            key={card._id}
-            card={card}
-            onCardClick={onCardClick}
-          />
+        {cards.map((card) => (
+          <CardsContext.Provider value={card}>
+            <Card key={card._id} onCardClick={onCardClick} />
+          </CardsContext.Provider>
         ))}
       </section>
-
     </main>
-  )
+  );
 }
 
 export default Main;
