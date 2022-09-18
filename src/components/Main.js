@@ -1,28 +1,18 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { api } from "../utils/Api";
 import Card from "./Card";
-import { CardsContext } from "../contexts/CardsContext";
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-  /* Создаем состояния */
-  const [cards, setCards] = React.useState([]);
-
+function Main({
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  cards,
+  onCardLike,
+  onCardDelete,
+}) {
   /* Подписываемся на контекст текущего пользователя */
   const currentUser = React.useContext(CurrentUserContext);
-  //console.log("контекст приехал", currentUser);
-
-  /* Получаем данные профиля и карточки с сервера */
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cardsInfo) => {
-        setCards(cardsInfo);
-      })
-      .catch((err) => {
-        console.log(`Ошибка загрузки данных с сервера: ${err}`);
-      });
-  }, []);
 
   return (
     <main className="content">
@@ -66,9 +56,13 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
       {/* Блок elements */}
       <section className="elements">
         {cards.map((card) => (
-          <CardsContext.Provider value={card}>
-            <Card key={card._id} onCardClick={onCardClick} />
-          </CardsContext.Provider>
+          <Card
+            key={card._id}
+            card={card}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+            onCardClick={onCardClick}
+          />
         ))}
       </section>
     </main>
