@@ -15,6 +15,12 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     });
   }
 
+  // Очищаем поля инпутов при открытии попапа.
+  React.useEffect(() => {
+    nameRef.current.value = "";
+    linkRef.current.value = "";
+  }, [isOpen]);
+
   return (
     <PopupWithForm
       title="Новое место"

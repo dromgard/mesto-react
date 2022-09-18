@@ -13,6 +13,11 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     });
   }
 
+  // Очищаем поля инпутов при открытии попапа.
+  React.useEffect(() => {
+    avatarRef.current.value = "";
+  }, [isOpen]);
+
   return (
     <PopupWithForm
       title="Обновить аватар"

@@ -14,6 +14,16 @@ function Main({
   /* Подписываемся на контекст текущего пользователя */
   const currentUser = React.useContext(CurrentUserContext);
 
+  const cardsElements = cards.map((card) => (
+    <Card
+      key={card._id}
+      card={card}
+      onCardLike={onCardLike}
+      onCardDelete={onCardDelete}
+      onCardClick={onCardClick}
+    />
+  ));
+
   return (
     <main className="content">
       {/* Блок profile */}
@@ -54,17 +64,7 @@ function Main({
       </section>
 
       {/* Блок elements */}
-      <section className="elements">
-        {cards.map((card) => (
-          <Card
-            key={card._id}
-            card={card}
-            onCardLike={onCardLike}
-            onCardDelete={onCardDelete}
-            onCardClick={onCardClick}
-          />
-        ))}
-      </section>
+      <section className="elements">{cardsElements}</section>
     </main>
   );
 }

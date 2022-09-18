@@ -5,7 +5,7 @@ class Api {
   }
 
   // Обрабатываем статус запроса к серверу, возвращаем положительный результат или промис с ошибкой.
-  _handleResponce(res) {
+  _handleResponse(res) {
     if (res.ok) {
       return res.json();
     }
@@ -16,14 +16,14 @@ class Api {
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Получаем карточки.
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Отправляем новые данные пользоателя.
@@ -35,7 +35,7 @@ class Api {
         name: name,
         about: about,
       }),
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Добавляем новую карточку.
@@ -47,7 +47,7 @@ class Api {
         name: name,
         link: link,
       }),
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Удаляем карточку.
@@ -55,7 +55,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Ставим лайк.
@@ -63,7 +63,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: "PUT",
       headers: this._headers,
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   // Удаляем лайк.
@@ -71,7 +71,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${id}/likes`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 
   changeLikeCardStatus(id, isLiked) {
@@ -79,12 +79,12 @@ class Api {
       return fetch(`${this._baseUrl}/cards/${id}/likes`, {
         method: "PUT",
         headers: this._headers,
-      }).then(this._handleResponce);
+      }).then(this._handleResponse);
     } else {
       return fetch(`${this._baseUrl}/cards/${id}/likes`, {
         method: "DELETE",
         headers: this._headers,
-      }).then(this._handleResponce);
+      }).then(this._handleResponse);
     }
   }
 
@@ -96,7 +96,7 @@ class Api {
       body: JSON.stringify({
         avatar: link,
       }),
-    }).then(this._handleResponce);
+    }).then(this._handleResponse);
   }
 }
 

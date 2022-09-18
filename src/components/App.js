@@ -12,9 +12,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
 
 function App() {
-  {
-    /* Создаем состояния */
-  }
+  // Создаем состояния
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
@@ -26,22 +24,22 @@ function App() {
   });
   const [cards, setCards] = React.useState([]);
 
-  /* Переменная состояния для хранения текущего пользователя */
-  const [currentUser, setCurrentUser] = React.useState("");
+  // Переменная состояния для хранения текущего пользователя.
+  const [currentUser, setCurrentUser] = React.useState({});
 
-  /* Получение и запись данных текущего пользователя в стейт */
+  // Получение и запись в стейты данных текущего пользователя и карточек.
   React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, cardsInfo]) => {
         setCurrentUser(userData);
+        setCards(cardsInfo);
       })
       .catch((err) => {
         console.log(`Ошибка загрузки данных с сервера: ${err}`);
       });
   }, []);
 
-  // Закрываем все попапы
+  // Закрываем все попапы.
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -90,10 +88,10 @@ function App() {
 
   // Обработчик лайков
   function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
+    // Снова проверяем, есть ли уже лайк на этой карточке.
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-    // Отправляем запрос в API и получаем обновлённые данные карточки
+    // Отправляем запрос в API и получаем обновлённые данные карточки.
     api
       .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
@@ -106,9 +104,9 @@ function App() {
       });
   }
 
-  // Обработчик удаления карточки
+  // Обработчик удаления карточки.
   function handleCardDelete(card) {
-    // Отправляем запрос в API и получаем обновлённые данные карточки
+    // Отправляем запрос в API и получаем обновлённые данные карточки.
     api
       .deleteCard(card._id)
       .then((deleteCard) => {
@@ -119,23 +117,10 @@ function App() {
       });
   }
 
-  /* Получаем карточки с сервера */
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cardsInfo) => {
-        setCards(cardsInfo);
-      })
-      .catch((err) => {
-        console.log(`Ошибка загрузки данных с сервера: ${err}`);
-      });
-  }, []);
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         {/* Блок header */}
-
         <Header />
 
         {/* Блок с основным контентом */}
